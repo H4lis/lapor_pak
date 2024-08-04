@@ -13,7 +13,7 @@ class AkunScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          header(),
+          header(context),
           Padding(
             padding: EdgeInsets.all(defaultMargin),
             child: Column(
@@ -22,27 +22,32 @@ class AkunScreen extends StatelessWidget {
                 TitleWidget(
                   title: "Pengaturan Akun",
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    borderRadius: BorderRadius.circular(defaulBorderadius),
-                  ),
-                  margin: EdgeInsets.only(bottom: 24, top: 24),
-                  padding: EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        "assets/icons/Pass.png",
-                        width: 24,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Ubah Password",
-                        style: blackTextStyle.copyWith(fontSize: 14),
-                      )
-                    ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/ubah_password_screen');
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.circular(defaulBorderadius),
+                    ),
+                    margin: EdgeInsets.only(bottom: 24, top: 24),
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          "assets/icons/Pass.png",
+                          width: 24,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Ubah Password",
+                          style: blackTextStyle.copyWith(fontSize: 14),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -146,7 +151,7 @@ class AkunScreen extends StatelessWidget {
     );
   }
 
-  Widget header() {
+  Widget header(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
           left: defaultMargin,
@@ -188,7 +193,9 @@ class AkunScreen extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, "/ubah_profile_screen");
+            },
             style: ElevatedButton.styleFrom(
               minimumSize: Size(72, 23),
               backgroundColor: primaryColor,

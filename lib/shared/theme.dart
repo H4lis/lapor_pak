@@ -15,13 +15,17 @@ Color whiteColor = Color(0xffFFFFFF);
 Color background1Color = Color(0xffF3F3F3);
 Color backgroundColor = Color(0xffF9F8F9);
 Color blueTextColor = Color(0xff0436E8);
-Color blueLightColor = Color(0xffCBD8FC); 
-Color bluetColor = Color(0xffC2D0F5); 
-Color bluetDarkColor = Color(0xffA5BBF6); 
-
+Color blueLightColor = Color(0xffCBD8FC);
+Color bluetColor = Color(0xffC2D0F5);
+Color bluetDarkColor = Color(0xffA5BBF6);
+Color secondaryColor = Color(0xff595959);
 
 TextStyle blackTextStyle = TextStyle(
   color: blackColor,
+  fontFamily: 'Roboto',
+);
+TextStyle secondaryTextStyle = TextStyle(
+  color: secondaryColor,
   fontFamily: 'Roboto',
 );
 TextStyle whiteTextStyle = TextStyle(
