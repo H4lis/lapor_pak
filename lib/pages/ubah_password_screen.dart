@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:lapor_pak/widgets/app_bar_Widget.dart';
 
 import '../shared/theme.dart';
-import '../widgets/button_navigation_widget.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class UbahPasswordScreen extends StatelessWidget {
+  const UbahPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Login"),
+      appBar: CustomAppBar(title: "Ubah Password"),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+        padding: EdgeInsets.all(defaultMargin),
         child: Column(
           children: [
             Expanded(
@@ -20,56 +19,13 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 32,
-                    ),
                     Text(
-                      "Email",
-                      style: blackTextStyle.copyWith(fontSize: 14),
+                      "Password Lama",
+                      style: blackTextStyle.copyWith(
+                          fontSize: 14, fontWeight: medium),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 12, bottom: 24),
-                      height: 48,
-                      child: TextField(
-                        style: blackTextStyle.copyWith(fontSize: 14),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: background1Color,
-                          prefixIcon: Padding(
-                              padding: const EdgeInsets.all(13),
-                              child: Icon(
-                                Icons.email,
-                                size: 24,
-                                color: greyTertiaryColor,
-                              )),
-                          hintText: "Masukkan Email",
-                          hintStyle:
-                              greyTertiaryTextStyle.copyWith(fontSize: 14),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Ganti dengan defaulBorderadius Anda
-                            borderSide:
-                                BorderSide.none, // Hilangkan border garis
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "Password",
-                      style: blackTextStyle.copyWith(fontSize: 14),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 12, bottom: 12),
                       height: 48,
                       child: TextField(
                         style: blackTextStyle.copyWith(fontSize: 14),
@@ -112,77 +68,53 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, "/forgot_password_screen");
-                          },
-                          child: Text(
-                            "Lupa Password?",
-                            style: BlueTextStyle.copyWith(fontSize: 12),
+                    Text(
+                      "Password Baru",
+                      style: blackTextStyle.copyWith(
+                          fontSize: 14, fontWeight: medium),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 12, bottom: 24),
+                      height: 48,
+                      child: TextField(
+                        style: blackTextStyle.copyWith(fontSize: 14),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: background1Color,
+                          prefixIcon: Padding(
+                              padding: const EdgeInsets.all(13),
+                              child: Icon(
+                                Icons.lock,
+                                size: 24,
+                                color: greyTertiaryColor,
+                              )),
+                          hintText: "Masukkan Password",
+                          hintStyle:
+                              greyTertiaryTextStyle.copyWith(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                defaulBorderadius), // Ganti dengan defaulBorderadius Anda
+                            borderSide:
+                                BorderSide.none, // Hilangkan border garis
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.visibility_outlined,
+                              color: greyTertiaryColor,
+                            ),
+                            onPressed: () {},
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/main_page');
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              defaulBorderadius,
-                            ),
-                          ),
-                          minimumSize: Size(double.infinity, 48)),
-                      child: Text(
-                        "Masuk",
-                        style: whiteTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: semiBold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/main_page');
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffF1F1F1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              defaulBorderadius,
-                            ),
-                          ),
-                          minimumSize: Size(double.infinity, 48),
-                          elevation: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icons/Google.png',
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 12,
-                          ),
-                          Text(
-                            "Daftar dengan google",
-                            style: blackTextStyle.copyWith(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ],
@@ -190,25 +122,27 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 12,
+              height: 24,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Belum punya akun?  ",
-                  style: blackTextStyle.copyWith(fontSize: 12),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, "/daftar_screen");
-                  },
-                  child: Text(
-                    'Daftar',
-                    style: BlueTextStyle.copyWith(fontSize: 12),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/main_page');
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      defaulBorderadius,
+                    ),
                   ),
+                  minimumSize: Size(double.infinity, 48)),
+              child: Text(
+                "Masuk",
+                style: whiteTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: semiBold,
                 ),
-              ],
+              ),
             ),
             SizedBox(
               height: 24,
