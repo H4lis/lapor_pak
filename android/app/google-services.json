@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491697221494",
+    "project_id": "laporpak-fbfc5",
+    "storage_bucket": "laporpak-fbfc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491697221494:android:951139bfc57c0bdcd65457",
+        "android_client_info": {
+          "package_name": "com.dytech.lapor_pak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUAaM7Hv73jSAjXQLNZRaK7Yu9ShGsoqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
