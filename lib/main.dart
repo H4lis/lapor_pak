@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lapor_pak/pages/daftar_screen.dart';
 import 'package:lapor_pak/pages/detail_berita_screen.dart';
+import 'package:lapor_pak/pages/detail_laporan_screen.dart';
 import 'package:lapor_pak/pages/forgot_password.dart';
 import 'package:lapor_pak/pages/lapor_screen.dart';
 import 'package:lapor_pak/pages/main_page.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/detail_berita_screen': (context) => DetailBeritaScren(),
         '/ubah_profile_screen': (context) => UbahProfileScreen(),
         '/ubah_password_screen': (context) => UbahPasswordScreen(),
+        '/detail_laporan_screen': (context) => DetailLaporanScreen(),
       },
     );
   }
