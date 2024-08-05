@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lapor_pak/widgets/app_bar_Widget.dart';
 
@@ -14,7 +15,38 @@ class DaftarScreen extends StatefulWidget {
 class _DaftarScreenState extends State<DaftarScreen> {
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    TextEditingController emailC = TextEditingController();
+    TextEditingController passC = TextEditingController();
+    TextEditingController nomorTeleponC = TextEditingController();
     bool _isChecked = false;
+
+    void daftar() async {
+      if (emailC.text.isNotEmpty &&
+          passC.text.isNotEmpty &&
+          nomorTeleponC.text.isNotEmpty) {
+        try {
+          UserCredential userCredential =
+              await auth.createUserWithEmailAndPassword(
+            email: emailC.text,
+            password: passC.text,
+          );
+
+          print(userCredential);
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            print('The password provided is too weak.');
+          } else if (e.code == 'email-already-in-use') {
+            print('The account already exists for that email.');
+          }
+        } catch (e) {
+          print(e);
+        }
+      } else {
+        SnackBar(content: Text("Terjadi Kesalahan"));
+      }
+    }
+
     return Scaffold(
       appBar: CustomAppBar(title: "Daftar"),
       body: Padding(
@@ -37,6 +69,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                       margin: EdgeInsets.only(top: 12, bottom: 24),
                       height: 48,
                       child: TextField(
+                        controller: emailC,
                         style: blackTextStyle.copyWith(fontSize: 14),
                         decoration: InputDecoration(
                           filled: true,
@@ -78,6 +111,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                       margin: EdgeInsets.only(top: 12, bottom: 12),
                       height: 48,
                       child: TextField(
+                        controller: passC,
                         style: blackTextStyle.copyWith(fontSize: 14),
                         decoration: InputDecoration(
                           filled: true,
@@ -126,6 +160,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                       margin: EdgeInsets.only(top: 12, bottom: 12),
                       height: 48,
                       child: TextField(
+                        controller: nomorTeleponC,
                         style: blackTextStyle.copyWith(fontSize: 14),
                         decoration: InputDecoration(
                           filled: true,
@@ -207,8 +242,9 @@ class _DaftarScreenState extends State<DaftarScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/verifikasi_screen');
+                        // Navigator.pushReplacementNamed(
+                        //     context, '/verifikasi_screen')
+                        daftar();
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor,
