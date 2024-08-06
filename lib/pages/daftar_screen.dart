@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lapor_pak/widgets/app_bar_Widget.dart';
@@ -13,40 +14,95 @@ class DaftarScreen extends StatefulWidget {
 }
 
 class _DaftarScreenState extends State<DaftarScreen> {
-  @override
-  Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    TextEditingController emailC = TextEditingController();
-    TextEditingController passC = TextEditingController();
-    TextEditingController nomorTeleponC = TextEditingController();
-    bool _isChecked = false;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-    void daftar() async {
-      if (emailC.text.isNotEmpty &&
-          passC.text.isNotEmpty &&
-          nomorTeleponC.text.isNotEmpty) {
-        try {
-          UserCredential userCredential =
-              await auth.createUserWithEmailAndPassword(
-            email: emailC.text,
-            password: passC.text,
-          );
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  TextEditingController nameC = TextEditingController();
+  TextEditingController emailC = TextEditingController();
+  TextEditingController passC = TextEditingController();
+  TextEditingController nomorTeleponC = TextEditingController();
+  bool _isChecked = false;
+  bool _obscurePassword = true;
 
-          print(userCredential);
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            print('The password provided is too weak.');
-          } else if (e.code == 'email-already-in-use') {
-            print('The account already exists for that email.');
-          }
-        } catch (e) {
-          print(e);
+  void daftar() async {
+    if (emailC.text.isNotEmpty &&
+        nameC.text.isNotEmpty &&
+        passC.text.isNotEmpty &&
+        nomorTeleponC.text.isNotEmpty) {
+      try {
+        UserCredential userCredential =
+            await auth.createUserWithEmailAndPassword(
+          email: emailC.text,
+          password: passC.text,
+        );
+        if (userCredential.user != null) {
+          String uid = userCredential.user!.uid;
+          await firestore.collection('users').doc(uid).set({
+            'name': nameC.text,
+            'email': emailC.text,
+            'nomor': nomorTeleponC.text,
+            'createdAt': DateTime.now().toIso8601String(),
+          });
+          userCredential.user!.sendEmailVerification();
         }
-      } else {
-        SnackBar(content: Text("Terjadi Kesalahan"));
+        _showVerificationDialog(context);
+        print(userCredential);
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = '';
+        if (e.code == 'user-not-found') {
+          errorMessage =
+              'Tidak ada pengguna yang ditemukan untuk email tersebut.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'Email anda tidak sesuai.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Password yang Anda masukkan salah.';
+        } else if (e.code == 'weak-password') {
+          errorMessage = 'Password yang diberikan terlalu lemah.';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'Akun dengan email tersebut sudah ada.';
+        } else {
+          errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+          ),
+        );
+      }
+    } else {
+      if (nameC.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Nama harus diisi.'),
+          ),
+        );
+      }
+      if (emailC.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email harus diisi.'),
+          ),
+        );
+      }
+      if (passC.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password harus diisi.'),
+          ),
+        );
+      }
+      if (nomorTeleponC.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Nomor telepon harus diisi.'),
+          ),
+        );
       }
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Daftar"),
       body: Padding(
@@ -60,6 +116,48 @@ class _DaftarScreenState extends State<DaftarScreen> {
                   children: [
                     SizedBox(
                       height: 32,
+                    ),
+                    Text(
+                      "Nama Lengkap",
+                      style: blackTextStyle.copyWith(fontSize: 14),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 12, bottom: 24),
+                      height: 48,
+                      child: TextField(
+                        controller: nameC,
+                        style: blackTextStyle.copyWith(fontSize: 14),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: background1Color,
+                          prefixIcon: Padding(
+                              padding: const EdgeInsets.all(13),
+                              child: Icon(
+                                Icons.person_2_rounded,
+                                size: 24,
+                                color: greyTertiaryColor,
+                              )),
+                          hintText: "Masukkan Nama Lengkap",
+                          hintStyle:
+                              greyTertiaryTextStyle.copyWith(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                defaulBorderadius), // Ganti dengan defaulBorderadius Anda
+                            borderSide:
+                                BorderSide.none, // Hilangkan border garis
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
                     ),
                     Text(
                       "Email",
@@ -85,19 +183,18 @@ class _DaftarScreenState extends State<DaftarScreen> {
                           hintStyle:
                               greyTertiaryTextStyle.copyWith(fontSize: 14),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Ganti dengan defaulBorderadius Anda
-                            borderSide:
-                                BorderSide.none, // Hilangkan border garis
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
+                            borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
                             borderSide: BorderSide.none,
                           ),
                         ),
@@ -112,6 +209,7 @@ class _DaftarScreenState extends State<DaftarScreen> {
                       height: 48,
                       child: TextField(
                         controller: passC,
+                        obscureText: _obscurePassword,
                         style: blackTextStyle.copyWith(fontSize: 14),
                         decoration: InputDecoration(
                           filled: true,
@@ -127,27 +225,32 @@ class _DaftarScreenState extends State<DaftarScreen> {
                           hintStyle:
                               greyTertiaryTextStyle.copyWith(fontSize: 14),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Ganti dengan defaulBorderadius Anda
-                            borderSide:
-                                BorderSide.none, // Hilangkan border garis
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
+                            borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
                             borderSide: BorderSide.none,
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              Icons.visibility_outlined,
+                              _obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
                               color: greyTertiaryColor,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -176,19 +279,18 @@ class _DaftarScreenState extends State<DaftarScreen> {
                           hintStyle:
                               greyTertiaryTextStyle.copyWith(fontSize: 14),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Ganti dengan defaulBorderadius Anda
-                            borderSide:
-                                BorderSide.none, // Hilangkan border garis
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
+                            borderSide: BorderSide.none,
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                defaulBorderadius), // Sama dengan defaulBorderadius Anda
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
                             borderSide: BorderSide.none,
                           ),
                         ),
@@ -216,7 +318,6 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                 TextSpan(
                                   text: 'Syarat dan Ketentuan',
                                   style: BlueTextStyle.copyWith(fontSize: 12),
-                                  // Tambahkan tindakan saat teks ini ditekan
                                 ),
                                 TextSpan(
                                   text: ' serta ',
@@ -225,7 +326,6 @@ class _DaftarScreenState extends State<DaftarScreen> {
                                 TextSpan(
                                   text: 'Kebijakan Privasi',
                                   style: BlueTextStyle.copyWith(fontSize: 12),
-                                  // Tambahkan tindakan saat teks ini ditekan
                                 ),
                                 TextSpan(
                                   text: ' yang Berlaku',
@@ -242,8 +342,6 @@ class _DaftarScreenState extends State<DaftarScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Navigator.pushReplacementNamed(
-                        //     context, '/verifikasi_screen')
                         daftar();
                       },
                       style: ElevatedButton.styleFrom(
@@ -330,4 +428,60 @@ class _DaftarScreenState extends State<DaftarScreen> {
       ),
     );
   }
+}
+
+void _showVerificationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(defaulBorderadius),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/berhasil.png',
+              width: 216, // Adjust according to your image size
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Verifikasi Berhasil",
+              style: blackTextStyle.copyWith(fontSize: 16, fontWeight: bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Masuk ke halaman utama untuk memulai pelaporan",
+              style: secondaryTextStyle.copyWith(
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                Navigator.pushReplacementNamed(context, '/main_page');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(defaulBorderadius),
+                ),
+              ),
+              child: Text(
+                "Lanjutkan",
+                style: whiteTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: semiBold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

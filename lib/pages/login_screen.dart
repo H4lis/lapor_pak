@@ -1,11 +1,70 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lapor_pak/widgets/app_bar_Widget.dart';
 
 import '../shared/theme.dart';
 import '../widgets/button_navigation_widget.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  TextEditingController emailC = TextEditingController();
+  TextEditingController passC = TextEditingController();
+  bool _obscurePassword = true;
+  void login() async {
+    if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
+      try {
+        UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: emailC.text,
+          password: passC.text,
+        );
+        showVerificationDialog(context);
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = '';
+        if (e.code == 'user-not-found') {
+          errorMessage =
+              'Tidak ada pengguna yang ditemukan untuk email tersebut.';
+        } else if (e.code == 'wrong-password' ||
+            e.code == 'invalid-credential') {
+          errorMessage = 'Password yang Anda masukkan salah.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'Email yang Anda masukkan salah.';
+        } else {
+          errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+          ),
+        );
+      }
+    } else if (emailC.text.isEmpty && passC.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: const Text('Email dan password harus diisi.'),
+        ),
+      );
+    } else if (passC.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password harus diisi.'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email harus diisi.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     Text(
@@ -28,9 +87,10 @@ class LoginScreen extends StatelessWidget {
                       style: blackTextStyle.copyWith(fontSize: 14),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 12, bottom: 24),
+                      margin: const EdgeInsets.only(top: 12, bottom: 24),
                       height: 48,
                       child: TextField(
+                        controller: emailC,
                         style: blackTextStyle.copyWith(fontSize: 14),
                         decoration: InputDecoration(
                           filled: true,
@@ -69,9 +129,11 @@ class LoginScreen extends StatelessWidget {
                       style: blackTextStyle.copyWith(fontSize: 14),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 12, bottom: 12),
+                      margin: const EdgeInsets.only(top: 12, bottom: 12),
                       height: 48,
                       child: TextField(
+                        obscureText: _obscurePassword,
+                        controller: passC,
                         style: blackTextStyle.copyWith(fontSize: 14),
                         decoration: InputDecoration(
                           filled: true,
@@ -104,10 +166,16 @@ class LoginScreen extends StatelessWidget {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              Icons.visibility_outlined,
+                              _obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
                               color: greyTertiaryColor,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -127,12 +195,12 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 32,
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/main_page');
+                        login();
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor,
@@ -141,7 +209,7 @@ class LoginScreen extends StatelessWidget {
                               defaulBorderadius,
                             ),
                           ),
-                          minimumSize: Size(double.infinity, 48)),
+                          minimumSize: const Size(double.infinity, 48)),
                       child: Text(
                         "Masuk",
                         style: whiteTextStyle.copyWith(
@@ -150,7 +218,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     ElevatedButton(
@@ -158,13 +226,13 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushNamed(context, '/main_page');
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffF1F1F1),
+                          backgroundColor: const Color(0xffF1F1F1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                               defaulBorderadius,
                             ),
                           ),
-                          minimumSize: Size(double.infinity, 48),
+                          minimumSize: const Size(double.infinity, 48),
                           elevation: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +241,7 @@ class LoginScreen extends StatelessWidget {
                             'assets/icons/Google.png',
                             width: 24,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 12,
                           ),
                           Text(
@@ -189,7 +257,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Row(
@@ -210,7 +278,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             )
           ],
@@ -218,4 +286,36 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void showVerificationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacementNamed(context, '/main_page');
+      });
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(defaulBorderadius),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/berhasil.png',
+              width: 216, // Adjust according to your image size
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Login Berhasil",
+              style: blackTextStyle.copyWith(fontSize: 16, fontWeight: bold),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      );
+    },
+  );
 }

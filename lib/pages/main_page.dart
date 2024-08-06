@@ -26,7 +26,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber,
       body: screens[selectetedIndex],
       floatingActionButton: Floating(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
