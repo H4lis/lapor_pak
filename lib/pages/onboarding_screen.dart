@@ -132,7 +132,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           title2 == ""
               ? ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/main_page');
+                    Navigator.pushReplacementNamed(context, '/daftar_screen');
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
