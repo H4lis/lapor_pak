@@ -20,7 +20,7 @@ class AkunScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TitleWidget(
-                  title: "Pengaturan Akun",
+                  title: "Pengaturan AkunNNNN",
                 ),
                 GestureDetector(
                   onTap: () {
