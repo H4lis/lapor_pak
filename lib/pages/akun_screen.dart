@@ -43,7 +43,7 @@ class AkunScreen extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          "Ubah Password",
+                          "Ubah Passworddddddddd",
                           style: blackTextStyle.copyWith(fontSize: 14),
                         )
                       ],
