@@ -49,7 +49,6 @@ class MyApp extends StatelessWidget {
             ),
             home: snapshot.data != null ? MainPage() : SplashScreen(),
             routes: {
-             
               '/main_page': (context) => MainPage(),
               '/lapor_screen': (context) => LaporScreen(),
               '/daftar_screen': (context) => DaftarScreen(),

@@ -243,7 +243,10 @@ class _AkunScreenState extends State<AkunScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/ubah_profile_screen");
+              Navigator.pushNamed(
+                context,
+                "/ubah_profile_screen",
+              );
             },
             style: ElevatedButton.styleFrom(
               minimumSize: Size(72, 23),
