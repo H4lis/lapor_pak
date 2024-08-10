@@ -30,9 +30,16 @@ class _UbahProfileScreenState extends State<UbahProfileScreen> {
     if (nameC.text.isNotEmpty ||
         nomorC.text.isNotEmpty ||
         emailC.text.isNotEmpty) {
-      await firestore.collection("users").doc(uid).update({"name": nameC.text});
+      await firestore.collection("users").doc(uid).update({
+        "name": nameC.text,
+        "nomor": nomorC.text,
+        "email": emailC.text,
+      });
     } else {
-      try {} catch (e) {}
+      try {} catch (e) {
+
+        
+      }
     }
     Navigator.pushReplacementNamed(context, '/main_page');
   }
