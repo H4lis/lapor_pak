@@ -17,26 +17,79 @@ class LaporScreen extends StatefulWidget {
 
 class _LaporScreenState extends State<LaporScreen> {
   TextEditingController kronologisC = TextEditingController();
+
   FirebaseAuth auth = FirebaseAuth.instance;
   String? _selectedCategory;
   String? _selectedTindak;
+  bool isLoading = false;
 
   Future<void> lapor() async {
-    String uid = auth.currentUser!.uid;
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference<Map<String, dynamic>> collLaporan =
-        await firestore.collection("users").doc(uid).collection("laporan");
-
-    DateTime now = DateTime.now();
-    String fullDateTimeString = now.toString();
-    String dateAndTime = fullDateTimeString.split('.')[0];
-
-    await collLaporan.doc(dateAndTime).set({
-      "kronologis": kronologisC.text,
-      "lokasi": kronologisC.text,
-      "kategoriUnggahan" : _selectedCategory,
-      "tindakLanjut" : _selectedCategory
+    setState(() {
+      isLoading = true;
     });
+    if (_selectedCategory != null &&
+        _selectedTindak != null &&
+        kronologisC.text.isEmpty) {
+      try {
+        String uid = auth.currentUser!.uid;
+        FirebaseFirestore firestore = FirebaseFirestore.instance;
+        CollectionReference<Map<String, dynamic>> collLaporan =
+            await firestore.collection("users").doc(uid).collection("laporan");
+
+        DateTime now = DateTime.now();
+        String fullDateTimeString = now.toString();
+        String dateAndTime = fullDateTimeString.split('.')[0];
+
+        await collLaporan.doc(dateAndTime).set({
+          "lokasi": kronologisC.text,
+          "kronologis": kronologisC.text,
+          "kategoriUnggahan": _selectedCategory,
+          "tindakLanjut": _selectedTindak
+        });
+
+        Navigator.pushNamed(context, "/main_page");
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+          ),
+        );
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      if (_selectedCategory == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Pilih Kategori Unggahan'),
+          ),
+        );
+      }
+      if (_selectedTindak == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Pilih Tindak Lanjut',
+            ),
+          ),
+        );
+      }
+      if (kronologisC.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Deskripsi Kronologis Harus diisi',
+            ),
+          ),
+        );
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     print("========================");
   }
 
@@ -75,10 +128,11 @@ class _LaporScreenState extends State<LaporScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ElevatedButton(
-          onPressed: () {
-            lapor()
-                // Navigator.pushReplacementNamed(context, '/main_page')
-                ;
+          onPressed: () async {
+            if (!isLoading) {
+              lapor();
+            }
+            ;
           },
           style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
@@ -89,7 +143,7 @@ class _LaporScreenState extends State<LaporScreen> {
               ),
               minimumSize: Size(double.infinity, 48)),
           child: Text(
-            "Kirim Laporan",
+            isLoading ? "Loading..." : "Kirim Laporan",
             style: whiteTextStyle.copyWith(
               fontSize: 16,
               fontWeight: semiBold,
@@ -318,7 +372,7 @@ class _LaporScreenState extends State<LaporScreen> {
               'Lapangan Kejadian',
               style: blackTextStyle.copyWith(fontSize: 14),
             ),
-            value: 'Penyelidikan',
+            value: 'Lapangan Kejadian',
             groupValue: _selectedCategory,
             onChanged: (String? value) {
               setState(() {
@@ -378,7 +432,7 @@ class _LaporScreenState extends State<LaporScreen> {
               'Rehabilitasi',
               style: blackTextStyle.copyWith(fontSize: 14),
             ),
-            value: 'Media Sosial',
+            value: 'Rehabilitasi',
             groupValue: _selectedTindak,
             onChanged: (String? value) {
               setState(() {
