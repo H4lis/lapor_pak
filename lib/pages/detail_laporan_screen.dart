@@ -1,10 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:lapor_pak/widgets/title_widget.dart';
 
 import '../shared/theme.dart';
 
 class DetailLaporanScreen extends StatelessWidget {
-  const DetailLaporanScreen({super.key});
+  Map<String, dynamic> data;
+  DetailLaporanScreen({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,7 @@ class DetailLaporanScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: whiteColor,
         title: Text(
-          "Ubah Profile",
+          "Lapor",
           style: blackTextStyle.copyWith(fontSize: 24, fontWeight: bold),
         ),
       ),
@@ -27,14 +33,20 @@ class DetailLaporanScreen extends StatelessWidget {
               TitleWidget(title: "Laporan dari Media Sosial"),
               SizedBox(height: 12),
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  fit: BoxFit.cover,
-                  height: 176,
-                  width: double.infinity,
-                  "assets/images/berita.png",
-                ),
-              ),
+                  borderRadius: BorderRadius.circular(12),
+                  child: data['image'] == ""
+                      ? Image.asset(
+                          fit: BoxFit.cover,
+                          height: 176,
+                          width: double.infinity,
+                          "assets/images/lapor.png",
+                        )
+                      : Image.network(
+                          data['image'],
+                          fit: BoxFit.cover,
+                          height: 176,
+                          width: double.infinity,
+                        )),
               TitleWidget(title: "Lokasi Somba Opu, Gowa"),
               SizedBox(height: 12),
               Container(
@@ -64,7 +76,7 @@ class DetailLaporanScreen extends StatelessWidget {
                     width: 40,
                   ),
                   Text(
-                    "Rehabilitasi",
+                    data['tindakLanjut'],
                     style: blackTextStyle.copyWith(
                         fontWeight: medium, fontSize: 16, color: primaryColor),
                   ),
@@ -82,7 +94,7 @@ class DetailLaporanScreen extends StatelessWidget {
                 height: 24,
               ),
               Text(
-                "Pada tanggal 10 Juli 2024, saya mulai mencurigai Siti, Rohida, dan Ani setelah menerima laporan guru tentang perubahan perilakunya. Selama dua minggu, kami mengamati penurunan prestasi mereka, absensi mereka tidak ada alasan yang jelas, dan perilaku mereka menjadi tidak baik seperti senang berkeliaran kemana-mana dan pulang tengah malam dalam keadaan setengah sadar. Rupanya ketika saya menggeladah pakaiannya, saya mendapati ada semacam serbuk putih yang di wadahi kantong plastik, saya curiga ini adalah narkoba.",
+                data['kronologis'] ?? 'Kronologis Tidak Diketahui',
                 style: secondaryTextStyle.copyWith(fontSize: 14),
               ),
               SizedBox(

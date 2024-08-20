@@ -1,12 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lapor_pak/shared/theme.dart';
 import 'package:lapor_pak/widgets/title_widget.dart';
-
-import '../widgets/button_navigation_widget.dart';
 
 class LaporScreen extends StatefulWidget {
   const LaporScreen({super.key});
@@ -19,17 +20,39 @@ class _LaporScreenState extends State<LaporScreen> {
   TextEditingController kronologisC = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
   String? _selectedCategory;
   String? _selectedTindak;
   bool isLoading = false;
+  final ImagePicker picker = ImagePicker();
+  bool isPicked = false;
+  XFile? pickedImage;
+
+  void imageAddd() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      pickedImage = XFile(image.path);
+      setState(() {
+        isPicked = true;
+      });
+    }
+
+    print("==================");
+    if (image != null) {
+      print(image.name);
+    }
+    print(image);
+    print("==================");
+  }
 
   Future<void> lapor() async {
-    setState(() {
-      isLoading = true;
-    });
     if (_selectedCategory != null &&
         _selectedTindak != null &&
-        kronologisC.text.isEmpty) {
+        pickedImage != null &&
+        kronologisC.text.isNotEmpty) {
+      setState(() {
+        isLoading = true;
+      });
       try {
         String uid = auth.currentUser!.uid;
         FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -40,10 +63,17 @@ class _LaporScreenState extends State<LaporScreen> {
         String fullDateTimeString = now.toString();
         String dateAndTime = fullDateTimeString.split('.')[0];
 
+        File file = File(pickedImage!.path);
+        String ext = pickedImage!.name.split('.').last;
+        await storage.ref("$dateAndTime/bukti.$ext").putFile(file);
+        String urlImage =
+            await storage.ref("$dateAndTime/bukti.$ext").getDownloadURL();
+
         await collLaporan.doc(dateAndTime).set({
           "lokasi": kronologisC.text,
           "kronologis": kronologisC.text,
           "kategoriUnggahan": _selectedCategory,
+          "image": urlImage,
           "tindakLanjut": _selectedTindak
         });
 
@@ -61,6 +91,13 @@ class _LaporScreenState extends State<LaporScreen> {
       }
     } else {
       if (_selectedCategory == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Pilih Kategori Unggahan'),
+          ),
+        );
+      }
+      if (pickedImage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Pilih Kategori Unggahan'),
@@ -85,12 +122,7 @@ class _LaporScreenState extends State<LaporScreen> {
           ),
         );
       }
-      setState(() {
-        isLoading = false;
-      });
     }
-
-    print("========================");
   }
 
   @override
@@ -254,30 +286,36 @@ class _LaporScreenState extends State<LaporScreen> {
         const TitleWidget(
           title: "Unggah Foto atau Vidio",
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 12),
-          height: 112,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              defaulBorderadius,
+        GestureDetector(
+          onTap: () {
+            print("===== masuk =================");
+            imageAddd();
+          },
+          child: Container(
+            margin: const EdgeInsets.only(top: 12),
+            height: 112,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                defaulBorderadius,
+              ),
+              color: bluetColor,
             ),
-            color: bluetColor,
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/icons/Kamera.png",
-                  width: 32,
-                ),
-                Text(
-                  "Unggah foto/video",
-                  style:
-                      whiteTextStyle.copyWith(fontSize: 16, fontWeight: medium),
-                ),
-              ],
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/icons/Kamera.png",
+                    width: 32,
+                  ),
+                  Text(
+                    "Unggah foto/video",
+                    style: whiteTextStyle.copyWith(
+                        fontSize: 16, fontWeight: medium),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -287,7 +325,7 @@ class _LaporScreenState extends State<LaporScreen> {
         Row(
           children: [
             Flexible(
-              flex: 1, // Atur nilai flex sesuai keinginan
+              flex: 1,
               child: Container(
                 height: 56,
                 decoration: BoxDecoration(
@@ -296,13 +334,23 @@ class _LaporScreenState extends State<LaporScreen> {
                     border: Border.all(
                       width: 1,
                       color: Color(0xffCDC9E1),
-                    )),
-                child: Center(
-                  child: Image.asset(
-                    'assets/icons/Image.png',
-                    width: 24,
-                  ),
-                ),
+                    ),
+                    image: isPicked
+                        ? DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(
+                              File(pickedImage!.path),
+                            ),
+                          )
+                        : null),
+                child: isPicked
+                    ? null
+                    : Center(
+                        child: Image.asset(
+                          "assets/icons/Image.png",
+                          width: 24,
+                        ),
+                      ),
               ),
             ),
             SizedBox(

@@ -1,16 +1,19 @@
-import 'dart:ffi';
-
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import 'package:flutter/material.dart';
 
 import '../shared/theme.dart';
 import '../widgets/header_baground.dart';
-import '../widgets/laporan_card.dart';
 import '../widgets/laporan_list.dart';
 import '../widgets/title_widget.dart';
 
-class AktivitasScreen extends StatelessWidget {
+class AktivitasScreen extends StatefulWidget {
   const AktivitasScreen({super.key});
 
+  @override
+  State<AktivitasScreen> createState() => _AktivitasScreenState();
+}
+
+class _AktivitasScreenState extends State<AktivitasScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,17 +26,25 @@ class AktivitasScreen extends StatelessWidget {
           Expanded(
             child: PageView(
               children: [
-                LaporanList(
-                  title: "Laporan Saya",
+                SingleChildScrollView(
+                  child: LaporanList(
+                    title: "Laporan Saya",
+                  ),
                 ),
-                LaporanList(
-                  title: "Laporan Terkirim",
+                SingleChildScrollView(
+                  child: LaporanList(
+                    title: "Laporan Terkirim",
+                  ),
                 ),
-                LaporanList(
-                  title: "Laporan Diproses",
+                SingleChildScrollView(
+                  child: LaporanList(
+                    title: "Laporan Diproses",
+                  ),
                 ),
-                LaporanList(
-                  title: "Laporan Tuntas",
+                SingleChildScrollView(
+                  child: LaporanList(
+                    title: "Laporan Tuntas",
+                  ),
                 ),
               ],
             ),
@@ -41,6 +52,8 @@ class AktivitasScreen extends StatelessWidget {
         ],
       ),
     );
+
+    ;
   }
 
   Widget kategoriLaporan() {

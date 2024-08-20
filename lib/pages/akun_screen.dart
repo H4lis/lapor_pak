@@ -35,7 +35,7 @@ class _AkunScreenState extends State<AkunScreen> {
           stream: streamUser(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -51,7 +51,7 @@ class _AkunScreenState extends State<AkunScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TitleWidget(
+                        const TitleWidget(
                           title: "Pengaturan Akun",
                         ),
                         GestureDetector(
@@ -65,15 +65,15 @@ class _AkunScreenState extends State<AkunScreen> {
                               borderRadius:
                                   BorderRadius.circular(defaulBorderadius),
                             ),
-                            margin: EdgeInsets.only(bottom: 24, top: 24),
-                            padding: EdgeInsets.all(12),
+                            margin: const EdgeInsets.only(bottom: 24, top: 24),
+                            padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
                                 Image.asset(
                                   "assets/icons/Pass.png",
                                   width: 24,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Text(
@@ -90,15 +90,15 @@ class _AkunScreenState extends State<AkunScreen> {
                             borderRadius:
                                 BorderRadius.circular(defaulBorderadius),
                           ),
-                          margin: EdgeInsets.only(bottom: 24),
-                          padding: EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 24),
+                          padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
                               Image.asset(
                                 "assets/icons/Tentang.png",
                                 width: 24,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
@@ -114,15 +114,15 @@ class _AkunScreenState extends State<AkunScreen> {
                             borderRadius:
                                 BorderRadius.circular(defaulBorderadius),
                           ),
-                          margin: EdgeInsets.only(bottom: 24),
-                          padding: EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 24),
+                          padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
                               Image.asset(
                                 "assets/icons/Syarat.png",
                                 width: 24,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
@@ -138,15 +138,15 @@ class _AkunScreenState extends State<AkunScreen> {
                             borderRadius:
                                 BorderRadius.circular(defaulBorderadius),
                           ),
-                          margin: EdgeInsets.only(bottom: 24),
-                          padding: EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 24),
+                          padding: const EdgeInsets.all(12),
                           child: Row(
                             children: [
                               Image.asset(
                                 "assets/icons/Privasi.png",
                                 width: 24,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
@@ -166,21 +166,21 @@ class _AkunScreenState extends State<AkunScreen> {
                               borderRadius:
                                   BorderRadius.circular(defaulBorderadius),
                             ),
-                            margin: EdgeInsets.only(bottom: 24),
-                            padding: EdgeInsets.all(12),
+                            margin: const EdgeInsets.only(bottom: 24),
+                            padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
                                 Image.asset(
                                   "assets/icons/Logout.png",
                                   width: 24,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Text(
                                   "Keluar",
                                   style: blackTextStyle.copyWith(
-                                      fontSize: 14, color: Color(0xffFC2E2E)),
+                                      fontSize: 14, color: const Color(0xffFC2E2E)),
                                 )
                               ],
                             ),
@@ -192,7 +192,7 @@ class _AkunScreenState extends State<AkunScreen> {
                 ],
               );
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -208,7 +208,7 @@ class _AkunScreenState extends State<AkunScreen> {
           top: 40,
           bottom: defaultMargin),
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(32)),
         gradient: LinearGradient(
           colors: [
@@ -249,7 +249,7 @@ class _AkunScreenState extends State<AkunScreen> {
               );
             },
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(72, 23),
+              minimumSize: const Size(72, 23),
               backgroundColor: primaryColor,
             ),
             child: Text(

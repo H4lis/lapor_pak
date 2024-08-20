@@ -37,9 +37,7 @@ class MyApp extends StatelessWidget {
               ),
             );
           }
-          print("======================");
-          print(snapshot.data);
-          print("======================");
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
@@ -58,7 +56,6 @@ class MyApp extends StatelessWidget {
               '/detail_berita_screen': (context) => DetailBeritaScren(),
               '/ubah_profile_screen': (context) => UbahProfileScreen(),
               '/ubah_password_screen': (context) => UbahPasswordScreen(),
-              '/detail_laporan_screen': (context) => DetailLaporanScreen(),
             },
           );
         });
