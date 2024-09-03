@@ -86,7 +86,7 @@ class _LaporanListState extends State<LaporanList> {
                               child: Image.network(
                                 width: 136,
                                 fit: BoxFit.cover,
-                                data['image'],
+                                data['image'][0],
                               ),
                             ),
                             SizedBox(
@@ -102,14 +102,26 @@ class _LaporanListState extends State<LaporanList> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 12, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: blueLightColor,
+                                      color:
+                                          data['status'] == "Laporan Diproses"
+                                              ? orangeLight
+                                              : data['status'] ==
+                                                      "Laporan Telah Diselidiki"
+                                                  ? greenLight
+                                                  : blueLightColor,
                                       borderRadius: BorderRadius.circular(100),
                                     ),
-                                    child: Text(
-                                      "Laporan Terkirim",
-                                      style:
-                                          BlueTextStyle.copyWith(fontSize: 8),
-                                    ),
+                                    child: Text(data['status'],
+                                        style: data['status'] ==
+                                                "Laporan Diproses"
+                                            ? orangeTextStyle.copyWith(
+                                                fontSize: 8)
+                                            : data['status'] ==
+                                                    "Laporan Telah Diselidiki"
+                                                ? greenTextStyle.copyWith(
+                                                    fontSize: 8)
+                                                : BlueTextStyle.copyWith(
+                                                    fontSize: 8)),
                                   ),
                                   Text(
                                     data['kronologis'],

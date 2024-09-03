@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:lapor_pak/pages/maps_example.dart';
 import 'package:lapor_pak/shared/theme.dart';
 
 import '../widgets/title_widget.dart';
@@ -23,8 +24,13 @@ class _AkunScreenState extends State<AkunScreen> {
   }
 
   void logout() async {
-    await auth.signOut();
-    Navigator.pushNamed(context, '/login_screen');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MapSample(),
+        ));
+    // await auth.signOut();
+    // Navigator.pushNamed(context, '/login_screen');
   }
 
   @override
@@ -180,7 +186,8 @@ class _AkunScreenState extends State<AkunScreen> {
                                 Text(
                                   "Keluar",
                                   style: blackTextStyle.copyWith(
-                                      fontSize: 14, color: const Color(0xffFC2E2E)),
+                                      fontSize: 14,
+                                      color: const Color(0xffFC2E2E)),
                                 )
                               ],
                             ),

@@ -3,6 +3,7 @@ import 'package:lapor_pak/pages/aktivitas_screen.dart';
 import 'package:lapor_pak/pages/akun_screen.dart';
 import 'package:lapor_pak/pages/beranda_screen.dart';
 import 'package:lapor_pak/pages/lapor_screen.dart';
+import 'package:lapor_pak/pages/maps_example.dart';
 import 'package:lapor_pak/pages/notifikasi_screen.dart';
 import 'package:lapor_pak/shared/theme.dart';
 import 'package:lapor_pak/widgets/bottom_navigation.dart';
@@ -20,7 +21,8 @@ class _MainPageState extends State<MainPage> {
     const BerandaScreen(),
     const AktivitasScreen(),
     const LaporScreen(),
-    const NotifikasiScreen(),
+    MapSample(),
+    // const NotifikasiScreen(),
     const AkunScreen()
   ];
   @override
@@ -32,10 +34,12 @@ class _MainPageState extends State<MainPage> {
       bottomSheet: BottomNavigation(
         selectedIndex: selectetedIndex,
         onTap: (val) {
-          setState(() {
-            selectetedIndex = val;
-          });
-        },
+          setState(
+            () {
+              selectetedIndex = val;
+            },
+          );
+        },    
       ),
     );
   }
