@@ -50,13 +50,25 @@ class _LaporanListState extends State<LaporanList> {
           if (snapLaporan.hasData) {
             var laporanList = snapLaporan.data!.docs;
 
+            var filteredLaporanList = widget.title.isEmpty
+                ? laporanList
+                : laporanList.where((doc) {
+                    return doc.data()['status'] == widget.title;
+                  }).toList();
+            if (filteredLaporanList.isEmpty) {
+              return Center(
+                child: Text("Tidak ada laporan yang sedang diproses."),
+              );
+            }
+
             return Container(
               padding: EdgeInsets.only(left: 12, right: 12, bottom: 110),
               color: whiteColor,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(laporanList.length, (index) {
-                    Map<String, dynamic> data = laporanList[index].data();
+                  children: List.generate(filteredLaporanList.length, (index) {
+                    Map<String, dynamic> data =
+                        filteredLaporanList[index].data();
 
                     return GestureDetector(
                       onTap: () {

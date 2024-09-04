@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../shared/theme.dart';
@@ -14,6 +14,7 @@ class AktivitasScreen extends StatefulWidget {
 }
 
 class _AktivitasScreenState extends State<AktivitasScreen> {
+  final PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +26,11 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
           kategoriLaporan(),
           Expanded(
             child: PageView(
+              controller: _pageController,
               children: [
                 SingleChildScrollView(
                   child: LaporanList(
-                    title: "Laporan Saya",
+                    title: "", //saya ingin menambahkan semuanya disini
                   ),
                 ),
                 SingleChildScrollView(
@@ -43,7 +45,7 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
                 ),
                 SingleChildScrollView(
                   child: LaporanList(
-                    title: "Laporan Tuntas",
+                    title: "Laporan Telah Diselidiki",
                   ),
                 ),
               ],
@@ -52,8 +54,6 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
         ],
       ),
     );
-
-    ;
   }
 
   Widget kategoriLaporan() {
@@ -83,7 +83,9 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(0);
+                      },
                       icon: Image.asset(
                         "assets/icons/Beranda.png",
                         width: 32,
@@ -112,7 +114,9 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(1);
+                      },
                       icon: Image.asset(
                         "assets/icons/Terkirim.png",
                         width: 32,
@@ -141,7 +145,9 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(2);
+                      },
                       icon: Image.asset(
                         "assets/icons/Diproses.png",
                         width: 32,
@@ -170,7 +176,9 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(3);
+                      },
                       icon: Image.asset(
                         "assets/icons/Tuntas.png",
                         width: 32,

@@ -38,8 +38,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
                 title: "Pernyataan Laporan",
               ),
             ),
-            const LaporanList(  
-              title: "Pernyataan Laporan",
+            const LaporanList(
+              title: "",
             ),
           ],
         ),

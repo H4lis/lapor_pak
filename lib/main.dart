@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,
             ),
-            home: snapshot.data != null ? MainPageAdmin () : SplashScreen(),
+            home: snapshot.data != null ? MainPageAdmin() : SplashScreen(),
             routes: {
               '/main_page': (context) => MainPage(),
               '/lapor_screen': (context) => LaporScreen(),

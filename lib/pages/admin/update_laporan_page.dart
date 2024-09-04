@@ -7,6 +7,7 @@ import '../../shared/theme.dart';
 import '../../widgets/laporan_list.dart';
 import '../../widgets/title_widget.dart';
 import '../detail_laporan_screen.dart';
+import 'detail_laporan_screen.dart';
 
 class UpdateLaporanPage extends StatefulWidget {
   const UpdateLaporanPage({super.key});
@@ -222,7 +223,7 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DetailLaporanScreen(
+                                builder: (context) => DetailUpdateLaporanScreen(
                                   data: data,
                                 ),
                               ));
