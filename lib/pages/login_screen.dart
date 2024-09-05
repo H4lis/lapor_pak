@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailC.text,
           password: passC.text,
         );
-        showVerificationDialog(context);
+        showVerificationDialog(context, emailC.text);
       } on FirebaseAuthException catch (e) {
         String errorMessage = '';
         if (e.code == 'user-not-found') {
@@ -288,12 +288,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-void showVerificationDialog(BuildContext context) {
+void showVerificationDialog(BuildContext context, String emailC) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       Future.delayed(const Duration(seconds: 1), () {
+        if (emailC == "nurhalis092@gmail.com") {
+           Navigator.pushReplacementNamed(context, '/main_page_admin');
+        }else{
+
         Navigator.pushReplacementNamed(context, '/main_page');
+         }
+
       });
       return AlertDialog(
         shape: RoundedRectangleBorder(

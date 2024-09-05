@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,8 +6,20 @@ import 'package:lapor_pak/shared/theme.dart';
 
 import '../../widgets/title_widget.dart';
 
-class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
+class DashboardPage extends StatefulWidget {
+  DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  void logout() async {
+    await auth.signOut();
+    Navigator.pushNamed(context, '/login_screen');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -445,10 +458,17 @@ class DashboardPage extends StatelessWidget {
         SizedBox(
           width: 18,
         ),
-        Text(
-          "Halo Admin",
-          style: blackTextStyle.copyWith(fontSize: 20, fontWeight: medium),
+        Expanded(
+          child: Text(
+            "Halo Admin",
+            style: blackTextStyle.copyWith(fontSize: 20, fontWeight: medium),
+          ),
         ),
+        IconButton(
+            onPressed: () {
+              logout();
+            },
+            icon: Icon(Icons.login_outlined))
       ],
     );
   }

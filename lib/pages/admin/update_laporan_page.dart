@@ -7,7 +7,7 @@ import '../../shared/theme.dart';
 import '../../widgets/laporan_list.dart';
 import '../../widgets/title_widget.dart';
 import '../detail_laporan_screen.dart';
-import 'detail_laporan_screen.dart';
+import 'detail_update_laporan_screen.dart';
 
 class UpdateLaporanPage extends StatefulWidget {
   const UpdateLaporanPage({super.key});
@@ -17,6 +17,7 @@ class UpdateLaporanPage extends StatefulWidget {
 }
 
 class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
+  final PageController _pageController = PageController();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -49,10 +50,36 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
       body: Column(
         children: [
           kategoriLaporan(),
-          // const LaporanList(
-          //   title: "Pernyataan Laporan",
-          // ),
-          listLaporan()
+          Expanded(
+            child: Container(
+              color: whiteColor,
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  SingleChildScrollView(
+                    child: listUpdateLaporan(
+                      "",
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: listUpdateLaporan(
+                      "Laporan Terkirim",
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: listUpdateLaporan(
+                      "Laporan Diproses",
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    child: listUpdateLaporan(
+                      "Laporan Telah Diselidiki",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -82,7 +109,9 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(0);
+                      },
                       icon: Image.asset(
                         "assets/icons/Beranda.png",
                         width: 32,
@@ -111,7 +140,9 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(1);
+                      },
                       icon: Image.asset(
                         "assets/icons/Terkirim.png",
                         width: 32,
@@ -140,7 +171,9 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(2);
+                      },
                       icon: Image.asset(
                         "assets/icons/Diproses.png",
                         width: 32,
@@ -169,7 +202,9 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
                       borderRadius: BorderRadius.circular(defaulBorderadius),
                     ),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageController.jumpToPage(3);
+                      },
                       icon: Image.asset(
                         "assets/icons/Tuntas.png",
                         width: 32,
@@ -195,7 +230,7 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
     );
   }
 
-  Widget listLaporan() {
+  Widget listUpdateLaporan(String status) {
     return StreamBuilder(
         stream: streamLaporan(),
         builder: (context, snapLaporan) {
@@ -207,110 +242,119 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
 
           if (snapLaporan.hasData) {
             var laporanList = snapLaporan.data!.docs;
+            var filteredLaporanList = status.isEmpty
+                ? laporanList
+                : laporanList.where((doc) {
+                    return doc.data()['status'] == status;
+                  }).toList();
 
-            return Expanded(
-              child: Container(
-                padding:
-                    EdgeInsets.only(top: 22, left: 12, right: 12, bottom: 110),
-                color: whiteColor,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(laporanList.length, (index) {
-                      Map<String, dynamic> data = laporanList[index].data();
+            if (filteredLaporanList.isEmpty) {
+              return Center(
+                child: Text("Tidak ada laporan yang sedang diproses."),
+              );
+            }
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailUpdateLaporanScreen(
-                                  data: data,
-                                ),
-                              ));
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 109,
-                          padding: EdgeInsets.all(12),
-                          margin: EdgeInsets.only(bottom: 12),
-                          decoration: BoxDecoration(
-                              color: backgroundColor,
-                              borderRadius:
-                                  BorderRadius.circular(defaulBorderadius),
-                              border: Border.all(
-                                  width: 1, color: neutralGray3Color)),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Image.network(
-                                  width: 136,
-                                  fit: BoxFit.cover,
-                                  data['image'][0],
-                                ),
+            return Container(
+              padding:
+                  EdgeInsets.only(top: 22, left: 12, right: 12, bottom: 110),
+              color: whiteColor,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(filteredLaporanList.length, (index) {
+                    Map<String, dynamic> data =
+                        filteredLaporanList[index].data();
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailUpdateLaporanScreen(
+                                data: data,
                               ),
-                              SizedBox(
-                                width: 12,
+                            ));
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 109,
+                        padding: EdgeInsets.all(12),
+                        margin: EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius:
+                                BorderRadius.circular(defaulBorderadius),
+                            border:
+                                Border.all(width: 1, color: neutralGray3Color)),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.network(
+                                width: 136,
+                                fit: BoxFit.cover,
+                                data['image'][0],
                               ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: data['status'] ==
-                                                "Laporan Diproses"
-                                            ? orangeLight
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          data['status'] == "Laporan Diproses"
+                                              ? orangeLight
+                                              : data['status'] ==
+                                                      "Laporan Telah Diselidiki"
+                                                  ? greenLight
+                                                  : blueLightColor,
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Text(
+                                        data['status'] == "Laporan Diproses"
+                                            ? "Sementara Diproses"
                                             : data['status'] ==
                                                     "Laporan Telah Diselidiki"
-                                                ? greenLight
-                                                : blueLightColor,
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      child: Text(
-                                          data['status'] == "Laporan Diproses"
-                                              ? "Sementara Diproses"
-                                              : data['status'] ==
-                                                      "Laporan Telah Diselidiki"
-                                                  ? "Selesai"
-                                                  : "Belum Diproses",
-                                          style: data['status'] ==
-                                                  "Laporan Diproses"
-                                              ? orangeTextStyle.copyWith(
-                                                  fontSize: 8)
-                                              : data['status'] ==
-                                                      "Laporan Telah Diselidiki"
-                                                  ? greenTextStyle.copyWith(
-                                                      fontSize: 8)
-                                                  : BlueTextStyle.copyWith(
-                                                      fontSize: 8)),
-                                    ),
-                                    Text(
-                                      data['kronologis'],
-                                      style:
-                                          blackTextStyle.copyWith(fontSize: 12),
-                                      overflow: TextOverflow.clip,
-                                      maxLines: 2,
-                                    ),
-                                    Text(
-                                      "Somba Opu, Gowa",
-                                      style: greyTertiaryTextStyle.copyWith(
-                                          fontSize: 8),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                                                ? "Selesai"
+                                                : "Belum Diproses",
+                                        style: data['status'] ==
+                                                "Laporan Diproses"
+                                            ? orangeTextStyle.copyWith(
+                                                fontSize: 8)
+                                            : data['status'] ==
+                                                    "Laporan Telah Diselidiki"
+                                                ? greenTextStyle.copyWith(
+                                                    fontSize: 8)
+                                                : BlueTextStyle.copyWith(
+                                                    fontSize: 8)),
+                                  ),
+                                  Text(
+                                    data['kronologis'],
+                                    style:
+                                        blackTextStyle.copyWith(fontSize: 12),
+                                    overflow: TextOverflow.clip,
+                                    maxLines: 2,
+                                  ),
+                                  Text(
+                                    "Somba Opu, Gowa",
+                                    style: greyTertiaryTextStyle.copyWith(
+                                        fontSize: 8),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                      );
-                    })),
-              ),
+                      ),
+                    );
+                  })),
             );
           } else {
             return Center(

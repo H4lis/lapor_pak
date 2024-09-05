@@ -24,13 +24,8 @@ class _AkunScreenState extends State<AkunScreen> {
   }
 
   void logout() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MapSample(),
-        ));
-    // await auth.signOut();
-    // Navigator.pushNamed(context, '/login_screen');
+    await auth.signOut();
+    Navigator.pushNamed(context, '/login_screen');
   }
 
   @override

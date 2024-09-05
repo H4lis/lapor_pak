@@ -25,30 +25,33 @@ class _AktivitasScreenState extends State<AktivitasScreen> {
           HeaderBaground(),
           kategoriLaporan(),
           Expanded(
-            child: PageView(
-              controller: _pageController,
-              children: [
-                SingleChildScrollView(
-                  child: LaporanList(
-                    title: "", //saya ingin menambahkan semuanya disini
+            child: Container(
+              color: whiteColor,
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  SingleChildScrollView(
+                    child: LaporanList(
+                      title: "", //saya ingin menambahkan semuanya disini
+                    ),
                   ),
-                ),
-                SingleChildScrollView(
-                  child: LaporanList(
-                    title: "Laporan Terkirim",
+                  SingleChildScrollView(
+                    child: LaporanList(
+                      title: "Laporan Terkirim",
+                    ),
                   ),
-                ),
-                SingleChildScrollView(
-                  child: LaporanList(
-                    title: "Laporan Diproses",
+                  SingleChildScrollView(
+                    child: LaporanList(
+                      title: "Laporan Diproses",
+                    ),
                   ),
-                ),
-                SingleChildScrollView(
-                  child: LaporanList(
-                    title: "Laporan Telah Diselidiki",
+                  SingleChildScrollView(
+                    child: LaporanList(
+                      title: "Laporan Telah Diselidiki",
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

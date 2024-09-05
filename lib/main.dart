@@ -40,27 +40,57 @@ class MyApp extends StatelessWidget {
               ),
             );
           }
+          if (snapshot.hasData
+          ) {
+            String userEmail = snapshot.data!.email ?? '';
+            List<String> adminEmails = ["nurhalis092@gmail.com"];
 
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
-            home: snapshot.data != null ? MainPageAdmin() : SplashScreen(),
-            routes: {
-              '/main_page': (context) => MainPage(),
-              '/lapor_screen': (context) => LaporScreen(),
-              '/daftar_screen': (context) => DaftarScreen(),
-              '/login_screen': (context) => LoginScreen(),
-              '/verifikasi_screen': (context) => VerifikasiScreen(),
-              '/forgot_password_screen': (context) => ForgotPasssword(),
-              '/ubah_profile_screen': (context) => UbahProfileScreen(),
-              '/ubah_password_screen': (context) => UbahPasswordScreen(),
-              '/upload_berita_screen': (context) => UploadBeritaScreen(),
-            },
-          );
+            bool isAdmin = adminEmails.contains(userEmail);
+
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: isAdmin ? MainPageAdmin() : MainPage(),
+              routes: {
+                '/main_page': (context) => MainPage(),
+                '/main_page_admin': (context) => MainPageAdmin(),
+                '/lapor_screen': (context) => LaporScreen(),
+                '/daftar_screen': (context) => DaftarScreen(),
+                '/login_screen': (context) => LoginScreen(),
+                '/verifikasi_screen': (context) => VerifikasiScreen(),
+                '/forgot_password_screen': (context) => ForgotPasssword(),
+                '/ubah_profile_screen': (context) => UbahProfileScreen(),
+                '/ubah_password_screen': (context) => UbahPasswordScreen(),
+                '/upload_berita_screen': (context) => UploadBeritaScreen(),
+              },
+            );
+          } else {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: SplashScreen(),
+              routes: {
+                '/main_page': (context) => MainPage(),
+                     '/main_page_admin': (context) => MainPageAdmin(),
+                '/lapor_screen': (context) => LaporScreen(),
+                '/daftar_screen': (context) => DaftarScreen(),
+                '/login_screen': (context) => LoginScreen(),
+                '/verifikasi_screen': (context) => VerifikasiScreen(),
+                '/forgot_password_screen': (context) => ForgotPasssword(),
+                '/ubah_profile_screen': (context) => UbahProfileScreen(),
+                '/ubah_password_screen': (context) => UbahPasswordScreen(),
+                '/upload_berita_screen': (context) => UploadBeritaScreen(),
+              },
+            );
+          }
         });
   }
 }

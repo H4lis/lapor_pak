@@ -24,6 +24,7 @@ class _LaporScreenState extends State<LaporScreen> {
   FirebaseStorage storage = FirebaseStorage.instance;
   String? _selectedCategory;
   String? _selectedTindak;
+  String? id;
   bool isLoading = false;
   final ImagePicker picker = ImagePicker();
   bool isPicked = false;
@@ -95,6 +96,7 @@ class _LaporScreenState extends State<LaporScreen> {
           String fileName =
               '${dateAndTime}_${DateTime.now().millisecondsSinceEpoch}.jpg';
           String filePath = '$dateAndTime/$fileName';
+          id = dateAndTime;
           await storage.ref(filePath).putFile(image);
           String urlImage = await storage.ref(filePath).getDownloadURL();
           imageUrls.add(urlImage);
@@ -102,6 +104,7 @@ class _LaporScreenState extends State<LaporScreen> {
 
         await collLaporan.doc(dateAndTime).set(
           {
+            "id": id,
             "lokasi": kronologisC.text,
             "kronologis": kronologisC.text,
             "kategoriUnggahan": _selectedCategory,
@@ -111,7 +114,7 @@ class _LaporScreenState extends State<LaporScreen> {
             "lurah": lurahDesaController.text,
             "kecamatan": kecamatanController.text,
             "kabupaten": kabupatenController.text,
-            "status": "Laporan Terkirim", 
+            "status": "Laporan Terkirim",
           },
         );
         Navigator.pushNamed(context, "/main_page");
