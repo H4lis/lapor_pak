@@ -28,12 +28,7 @@ class _LaporanListState extends State<LaporanList> {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamLaporan() {
-    String uid = auth.currentUser!.uid;
-    return firestore
-        .collection("users")
-        .doc(uid)
-        .collection("laporan")
-        .snapshots();
+    return firestore.collection("laporan").snapshots();
   }
 
   @override
@@ -49,15 +44,20 @@ class _LaporanListState extends State<LaporanList> {
 
           if (snapLaporan.hasData) {
             var laporanList = snapLaporan.data!.docs;
-
+            var filteredLaporanUser = laporanList.where(
+              (doc) {
+                return doc.data()['uid'] == auth.currentUser!.uid;
+              },
+            ).toList();
             var filteredLaporanList = widget.title.isEmpty
-                ? laporanList
-                : laporanList.where((doc) {
+                ? filteredLaporanUser
+                : filteredLaporanUser.where((doc) {
                     return doc.data()['status'] == widget.title;
                   }).toList();
+
             if (filteredLaporanList.isEmpty) {
               return Center(
-                child: Text("Tidak ada laporan yang sedang diproses."),
+                child: Text("Belum Ada Laporan"),
               );
             }
 

@@ -29,8 +29,7 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
   Stream<QuerySnapshot<Map<String, dynamic>>> streamLaporan() {
     String uid = auth.currentUser!.uid;
     return firestore
-        .collection("users")
-        .doc(uid)
+
         .collection("laporan")
         .snapshots();
   }
@@ -250,7 +249,12 @@ class _UpdateLaporanPageState extends State<UpdateLaporanPage> {
 
             if (filteredLaporanList.isEmpty) {
               return Center(
-                child: Text("Tidak ada laporan yang sedang diproses."),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Belum Ada Laporan"),
+                  ],
+                ),
               );
             }
 

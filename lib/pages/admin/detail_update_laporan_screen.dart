@@ -67,10 +67,7 @@ class _DetailUpdateLaporanScreenState extends State<DetailUpdateLaporanScreen> {
           ));
 
       CollectionReference<Map<String, dynamic>> collLaporan =
-          await FirebaseFirestore.instance
-              .collection("users")
-              .doc(uid)
-              .collection("laporan");
+          await FirebaseFirestore.instance.collection("laporan");
       await collLaporan.doc(widget.data['id']).update(
         {
           "status": "Laporan Diproses",
@@ -96,8 +93,7 @@ class _DetailUpdateLaporanScreenState extends State<DetailUpdateLaporanScreen> {
             ));
         CollectionReference<Map<String, dynamic>> collLaporan =
             await FirebaseFirestore.instance
-                .collection("users")
-                .doc(uid)
+            
                 .collection("laporan");
 
         await collLaporan.doc(widget.data['id']).update(

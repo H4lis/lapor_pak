@@ -85,7 +85,7 @@ class _LaporScreenState extends State<LaporScreen> {
         String uid = auth.currentUser!.uid;
         FirebaseFirestore firestore = FirebaseFirestore.instance;
         CollectionReference<Map<String, dynamic>> collLaporan =
-            await firestore.collection("users").doc(uid).collection("laporan");
+            await firestore.collection("laporan");
 
         DateTime now = DateTime.now();
         String fullDateTimeString = now.toString();
@@ -104,6 +104,7 @@ class _LaporScreenState extends State<LaporScreen> {
 
         await collLaporan.doc(dateAndTime).set(
           {
+            "uid": uid,
             "id": id,
             "lokasi": kronologisC.text,
             "kronologis": kronologisC.text,
